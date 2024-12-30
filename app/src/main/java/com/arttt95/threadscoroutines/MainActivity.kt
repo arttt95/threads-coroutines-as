@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -105,17 +106,20 @@ class MainActivity : AppCompatActivity() {
                 }*/
 
                 val tempo = measureTimeMillis {
-                    var resultado1: String? = null
-                    var resultado2: String? = null
 
-                    val job1 = launch { resultado1 = tarefa1() }
-                    val job2 = launch { resultado2 = tarefa2() }
+                    val resultado1 = async {tarefa1() }
+                    val resultado2 = async {tarefa2() }
 
-                    job1.join()
-                    job2.join()
+                    withContext(Dispatchers.Main) {
+                        binding.btnIniciar.text =
+                            "${resultado1.await()}"
+                        binding.btnParar.text =
+                            "${resultado2.await()}"
+                    }
 
-                    Log.i("info_coroutine", "Resultado-1: $resultado1")
-                    Log.i("info_coroutine", "Resultado-2: $resultado2")
+
+                    Log.i("info_coroutine", "Resultado-1: ${resultado1.await()}")
+                    Log.i("info_coroutine", "Resultado-2: ${resultado2.await()}")
                 }
 
                 Log.i("info_coroutine", "Tempo: $tempo")
@@ -143,7 +147,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun tarefa1() : String {
 
-        repeat(3) { indice ->
+        repeat(6) { indice ->
 
             Log.i(
                 "info_coroutine",
@@ -176,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun tarefa2() : String {
 
-        repeat(3) { indice ->
+        repeat(5) { indice ->
 
             Log.i(
                 "info_coroutine",
@@ -199,7 +203,7 @@ class MainActivity : AppCompatActivity() {
 
             }*/
 
-            delay(1000L)
+            delay(2000L)
 
         }
 
