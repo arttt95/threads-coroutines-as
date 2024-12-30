@@ -73,25 +73,29 @@ class MainActivity : AppCompatActivity() {
 
             CoroutineScope(Dispatchers.IO).launch {
 
-                repeat(15) { indice ->
+//                recuperarUsuarioLogado()
+
+                executar()
+
+                /*repeat(15) { indice ->
 
                     Log.i(
                         "info_coroutine",
-                        "Executando $indice -> T: ${/*Thread.*/currentThread().name}"
+                        "Executando $indice -> T: ${Thread.currentThread().name}"
                     )
 
-                    /*runOnUiThread {
-                        binding.btnIniciar.text = "Executou"
-                    }*/
+//                    runOnUiThread {
+//                        binding.btnIniciar.text = "Executou"
+//                    }
 
                     withContext(Dispatchers.Main) {
                         binding.btnIniciar.text =
-                            "Executando $indice -> T: ${/*Thread.*/currentThread().name}"
+                            "Executando $indice -> T: ${Thread.currentThread().name}"
                     }
 
                     delay(1000)
 
-                }
+                }*/
 
             }
 
@@ -103,6 +107,32 @@ class MainActivity : AppCompatActivity() {
             binding.btnIniciar.isEnabled = true
 
         }
+
+    }
+
+    private suspend fun executar() {
+        val usuario = recuperarUsuarioLogado()
+        Log.i("info_coroutine", "Usuario: ${usuario.nome} T: ${currentThread().name}")
+        val postagens = recuperarPostagensPeloId(usuario.id)
+        Log.i("info_coroutine", "NPostagens: ${postagens.size} T: ${currentThread().name}")
+    }
+
+    private suspend fun recuperarPostagensPeloId(idUsuario: Int) : List<String> {
+        delay(2000)
+        val listaPostagens = listOf(
+            "Viajei para Ubatuba",
+            "Comprei um dog",
+            "Troquei de carro"
+        )
+
+        return listaPostagens
+    }
+
+    private suspend fun recuperarUsuarioLogado(): Usuario{
+
+        delay(2000) // Esperando retorno da API para prosseguir
+
+        return Usuario(1020, "Shisui")
 
     }
 
