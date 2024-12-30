@@ -7,14 +7,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.arttt95.threadscoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.lang.Thread.currentThread
@@ -31,6 +35,11 @@ class MainActivity : AppCompatActivity() {
     private var pararThread = false
     private var job: Job? = null
 
+    override fun onDestroy() {
+        super.onDestroy()
+        job?.cancel()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,9 +55,32 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SegundaActivity::class.java)
         binding.btnNovaTela.setOnClickListener {
             startActivity(intent)
+            finish()
         }
 
         binding.btnIniciar.setOnClickListener {
+
+//            CoroutineScope(Dispatchers.Main).launch {
+//            MainScope().launch {
+//            CoroutineScope(Dispatchers.IO).launch {
+//            GlobalScope.launch {
+//            lifecycleScope.launch {
+            runBlocking {
+                /*repeat(30){ indice ->
+
+                    runOnUiThread {
+                        binding.btnIniciar.text = "Executando $indice"
+                    }
+
+                    Log.i(
+                        "info_coroutine",
+                        "TAREFA-2 $indice -> T: ${Thread.currentThread().name}"
+                    )
+                    delay(1000L)
+                }*/
+                binding.btnIniciar.text = "Executando"
+
+            }
 
 /*//            MinhaThread().start()
 //            Thread(MinhaRunnable()).start()*/
@@ -77,33 +109,32 @@ class MainActivity : AppCompatActivity() {
                 Log.i("info_thread", "Executando $indice -> T: ${currentThread().name}")
                 sleep(1000)
             }*/
+            /*job = CoroutineScope(Dispatchers.IO).launch {
 
-            job = CoroutineScope(Dispatchers.IO).launch {
-
-                /*withTimeout(7000L) {
+                withTimeout(7000L) {
                     executar()
-                }*/
+                }
 
 //                recuperarUsuarioLogado()
-                /*repeat(15) { indice ->
-
-                    Log.i(
-                        "info_coroutine",
-                        "Executando $indice -> T: ${Thread.currentThread().name}"
-                    )
-
-//                    runOnUiThread {
-//                        binding.btnIniciar.text = "Executou"
+//                repeat(15) { indice ->
+//
+//                    Log.i(
+//                        "info_coroutine",
+//                        "Executando $indice -> T: ${Thread.currentThread().name}"
+//                    )
+//
+////                    runOnUiThread {
+////                        binding.btnIniciar.text = "Executou"
+////                    }
+//
+//                    withContext(Dispatchers.Main) {
+//                        binding.btnIniciar.text =
+//                            "Executando $indice -> T: ${Thread.currentThread().name}"
 //                    }
-
-                    withContext(Dispatchers.Main) {
-                        binding.btnIniciar.text =
-                            "Executando $indice -> T: ${Thread.currentThread().name}"
-                    }
-
-                    delay(1000)
-
-                }*/
+//
+//                    delay(1000)
+//
+//                }
 
                 val tempo = measureTimeMillis {
 
@@ -124,7 +155,7 @@ class MainActivity : AppCompatActivity() {
 
                 Log.i("info_coroutine", "Tempo: $tempo")
 
-            }
+            }*/
 
         }
 
@@ -147,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun tarefa1() : String {
 
-        repeat(6) { indice ->
+        repeat(10) { indice ->
 
             Log.i(
                 "info_coroutine",
@@ -180,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun tarefa2() : String {
 
-        repeat(5) { indice ->
+        repeat(4) { indice ->
 
             Log.i(
                 "info_coroutine",
