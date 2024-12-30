@@ -36,11 +36,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnIniciar.setOnClickListener {
 
-//            MinhaThread().start()
-            repeat(15) { indice ->
+            MinhaThread().start()
+
+            /*repeat(15) { indice ->
                 Log.i("info_thread", "Executando $indice -> T: ${currentThread().name}")
                 sleep(1000)
-            }
+            }*/
 
         }
 
@@ -53,6 +54,15 @@ class MainActivity : AppCompatActivity() {
 
             repeat(30) { indice ->
                 Log.i("info_thread", "Executando $indice -> T: ${currentThread().name}")
+                runOnUiThread {
+                    binding.btnIniciar.text = "Minha Thread $indice -> T: ${currentThread().name}"
+                    binding.btnIniciar.isEnabled = false
+
+                    if(indice == 29 ) {
+                        binding.btnIniciar.text = "Reiniciar execução"
+                        binding.btnIniciar.isEnabled = true
+                    }
+                }
                 sleep(1000)
             }
 
