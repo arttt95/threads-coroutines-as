@@ -8,6 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.arttt95.threadscoroutines.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Thread.currentThread
 import java.lang.Thread.sleep
 
@@ -39,9 +44,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnIniciar.setOnClickListener {
 
 //            MinhaThread().start()
-
-            Thread(MinhaRunnable()).start()
-
+//            Thread(MinhaRunnable()).start()
             /*Thread{
                 repeat(30) { indice ->
                     Log.i(
@@ -63,11 +66,34 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }.start()*/
-
             /*repeat(15) { indice ->
                 Log.i("info_thread", "Executando $indice -> T: ${currentThread().name}")
                 sleep(1000)
             }*/
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+                repeat(15) { indice ->
+
+                    Log.i(
+                        "info_coroutine",
+                        "Executando $indice -> T: ${/*Thread.*/currentThread().name}"
+                    )
+
+                    /*runOnUiThread {
+                        binding.btnIniciar.text = "Executou"
+                    }*/
+
+                    withContext(Dispatchers.Main) {
+                        binding.btnIniciar.text =
+                            "Executando $indice -> T: ${/*Thread.*/currentThread().name}"
+                    }
+
+                    delay(1000)
+
+                }
+
+            }
 
         }
 
