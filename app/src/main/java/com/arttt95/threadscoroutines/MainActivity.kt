@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    var pararThread = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,12 +38,77 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnIniciar.setOnClickListener {
 
-            MinhaThread().start()
+//            MinhaThread().start()
+
+            Thread(MinhaRunnable()).start()
+
+            /*Thread{
+                repeat(30) { indice ->
+                    Log.i(
+                        "info_thread",
+                        "Executando $indice -> T: ${Thread.currentThread().name}"
+                    )
+                    runOnUiThread {
+                        binding.btnIniciar.text =
+                            "Minha Thread $indice -> T: ${Thread.currentThread().name}"
+                        binding.btnIniciar.isEnabled = false
+
+                        if(indice == 29 ) {
+                            binding.btnIniciar.text = "Reiniciar execução"
+                            binding.btnIniciar.isEnabled = true
+                        }
+                    }
+
+                    sleep(1000)
+
+                }
+            }.start()*/
 
             /*repeat(15) { indice ->
                 Log.i("info_thread", "Executando $indice -> T: ${currentThread().name}")
                 sleep(1000)
             }*/
+
+        }
+
+        binding.btnParar.setOnClickListener {
+            pararThread = true
+            binding.btnIniciar.text = "Reiniciar execução"
+            binding.btnIniciar.isEnabled = true
+
+        }
+
+    }
+
+    inner class MinhaRunnable : Runnable {
+
+        override fun run() {
+
+            repeat(30) { indice ->
+
+                if(pararThread) {
+                    pararThread = false
+                    return
+                }
+
+                Log.i(
+                    "info_thread",
+                    "Executando $indice -> T: ${/*Thread.*/currentThread().name}"
+                )
+                runOnUiThread {
+                    binding.btnIniciar.text =
+                        "Minha Thread $indice -> T: ${/*Thread.*/currentThread().name}"
+                    binding.btnIniciar.isEnabled = false
+
+                    if(indice == 29 ) {
+                        binding.btnIniciar.text = "Reiniciar execução"
+                        binding.btnIniciar.isEnabled = true
+                    }
+                }
+
+                sleep(1000)
+
+            }
 
         }
 
