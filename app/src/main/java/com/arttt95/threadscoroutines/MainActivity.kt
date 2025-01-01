@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.arttt95.threadscoroutines.api.RetrofitHelper
 import com.arttt95.threadscoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import retrofit2.Retrofit
 import java.lang.Thread.currentThread
 import java.lang.Thread.sleep
 import kotlin.coroutines.coroutineContext
@@ -30,6 +32,10 @@ class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val retrofit by lazy {
+        RetrofitHelper.retrofit
     }
 
     private var pararThread = false
@@ -60,28 +66,27 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnIniciar.setOnClickListener {
 
-//            CoroutineScope(Dispatchers.Main).launch {
-//            MainScope().launch {
-//            CoroutineScope(Dispatchers.IO).launch {
-//            GlobalScope.launch {
-//            lifecycleScope.launch {
-            runBlocking {
-                /*repeat(30){ indice ->
-
-                    runOnUiThread {
-                        binding.btnIniciar.text = "Executando $indice"
-                    }
-
-                    Log.i(
-                        "info_coroutine",
-                        "TAREFA-2 $indice -> T: ${Thread.currentThread().name}"
-                    )
-                    delay(1000L)
-                }*/
+            /*CoroutineScope(Dispatchers.Main).launch {
+            MainScope().launch {
+            CoroutineScope(Dispatchers.IO).launch {
+            GlobalScope.launch {
+            lifecycleScope.launch {*/
+            /*runBlocking {
+//                repeat(30){ indice ->
+//
+//                    runOnUiThread {
+//                        binding.btnIniciar.text = "Executando $indice"
+//                    }
+//
+//                    Log.i(
+//                        "info_coroutine",
+//                        "TAREFA-2 $indice -> T: ${Thread.currentThread().name}"
+//                    )
+//                    delay(1000L)
+//                }
                 binding.btnIniciar.text = "Executando"
 
-            }
-
+            }*/
 /*//            MinhaThread().start()
 //            Thread(MinhaRunnable()).start()*/
             /*Thread{
@@ -164,6 +169,10 @@ class MainActivity : AppCompatActivity() {
             job?.cancel()
             binding.btnIniciar.text = "Reiniciar execução"
             binding.btnIniciar.isEnabled = true
+
+        }
+
+        binding.btnRetrofit.setOnClickListener {
 
         }
 
