@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.arttt95.threadscoroutines.api.EnderecoAPI
 import com.arttt95.threadscoroutines.api.RetrofitHelper
 import com.arttt95.threadscoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineDispatcher
@@ -173,8 +174,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnRetrofit.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch() {
 
+                recuperarEndereco()
+
+            }
         }
+
+    }
+
+    private suspend fun recuperarEndereco() {
+
+        val enderecoAPI = retrofit.create(EnderecoAPI::class.java)
+        enderecoAPI.recuperarEndereco()
 
     }
 
